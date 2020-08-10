@@ -25,6 +25,8 @@ def getTemperatureSensorValues():
             if value["sensorId"] is not None and value["value"] is not None:
                 valueList.append(value)
 
+        except FileNotFoundError:
+            print("")
 
     return valueList
 
