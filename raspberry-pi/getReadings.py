@@ -3,14 +3,6 @@ import os
 
 DEVICE_ID = "margosGreenhouse"
 
-dhtReadings = getDHTSensorValues()
-temperatureReadings = getTemperatureSensorValues()
-
-readings = dhtReadings.extend(temperatureReadings)
-
-print(readings)
-print("DONE")
-
 def getTemperatureSensorValues():
     valueList = []
 
@@ -46,3 +38,11 @@ def getDHTSensorValues():
     valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_H", "type": "h", "value": humidity})
     return valueList
 
+
+dhtReadings = getDHTSensorValues()
+temperatureReadings = getTemperatureSensorValues()
+
+readings = dhtReadings.extend(temperatureReadings)
+
+print(readings)
+print("DONE")
