@@ -39,7 +39,7 @@ def getTemperatureSensorIds():
 
     return valueList
 
-def getDHTSensorValues(deviceId):
+def getDHTSensorIds():
     print("Getting DHT IDs")
     valueList = []
 
@@ -55,8 +55,8 @@ def getDHTSensorValues(deviceId):
 
 DEVICE_ID = getRaspberryPiSerial()
 
-dhtSensors = getDHTSensorValues(DEVICE_ID)
-temperatureSensors = getTemperatureSensorValues(DEVICE_ID)
+dhtSensors = getDHTSensorIds()
+temperatureSensors = getTemperatureSensorIds()
 
 deviceObject = {
     "deviceId": DEVICE_ID,
