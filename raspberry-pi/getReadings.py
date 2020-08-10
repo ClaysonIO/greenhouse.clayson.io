@@ -17,17 +17,16 @@ def getTemperatureSensorValues():
             value = {"deviceId": DEVICE_ID, "sensorId": None, "type": "t", "value": None, "time": readingTimeStampInMs}
 
             with open(folder + "/name", 'r') as name:
-                value["sensorId"] = strip(name.readline())
+                value["sensorId"] = name.readline().strip()
 
             with open(folder + "/temperature", 'r') as temperature:
-                value["value"] = float(strip(temperature.readline()))
+                value["value"] = float(temperature.readline().strip())
 
             if value["sensorId"] is not None and value["value"] is not None:
-                print(value)
                 valueList.append(value)
 
         except FileNotFoundError:
-            print("File Not Found")
+
     return valueList
 
 def getDHTSensorValues():
