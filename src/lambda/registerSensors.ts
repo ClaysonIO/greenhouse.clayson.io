@@ -1,7 +1,7 @@
 //Add sensors
 import {APIGatewayProxyCallback, APIGatewayProxyEvent} from "aws-lambda";
 import {MongoHelpers} from "./utilities/mongo";
-import {ISensor} from "./utilities/sensor";
+import {IDevice} from "./utilities/devices";
 
 export function handler(
     event: APIGatewayProxyEvent,
@@ -10,21 +10,17 @@ export function handler(
 ) {
     try {
         if(event.body && event.httpMethod === 'POST'){
-            const body: ISensor[] = JSON.parse(event.body);
+            const body: IDevice = JSON.parse(event.body);
 
-            const modifiedBody = body.map(val=>{
-                val._id = val.id;
-                return val;
-            })
-
-            MongoHelpers.InsertArray('sensors', modifiedBody)
+            MongoHelpers.InsertArray('devices', [{deviceId: body.deviceId}])
+                .then(()=>MongoHelpers.InsertArray('sensors', body.sensors))
                 .then(()=>{
                     callback(null, {
                         statusCode: 200,
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({msg: `Inserted ${body.length} sensors`})
+                        body: JSON.stringify({msg: `Inserted 1 device and  ${body.sensors.length} sensors`})
                     })
                 })
                 .catch(err=>{
