@@ -22,3 +22,10 @@ Software Setup:
       * `sudo python3 -m pip install --upgrade pip setuptools wheel`
       * `sudo pip3 install Adafruit_DHT`
 * To setup the recurring jobs: 
+  * Type `crontab -e`
+  * Add the following lines:
+```
+@reboot cd ~/greenhouse.clayson.io; git pull;
+@reboot python3 ~/greenhouse.clayson.io/raspberry-pi/registerSensors.py                                                                                       
+* * * * * python3 ~/greenhouse.clayson.io/raspberry-pi/getReadings.py
+```
