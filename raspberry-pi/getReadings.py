@@ -1,5 +1,8 @@
 import Adafruit_DHT
 import os
+import datetime
+
+readingTimeStampInMs = round(datetime.datetime.now().timestamp() * 1000)
 
 DEVICE_ID = "margosGreenhouse"
 
@@ -11,7 +14,7 @@ def getTemperatureSensorValues():
 
     for folder in subfolders:
         try:
-            value = {"deviceId": DEVICE_ID, "sensorId": None, "type": "t", "value": None}
+            value = {"deviceId": DEVICE_ID, "sensorId": None, "type": "t", "value": None, "time": readingTimeStampInMs}
 
             with open(folder + "/name", 'r') as name:
                 value["sensorId"] = name.readline()
@@ -35,16 +38,17 @@ def getDHTSensorValues():
     DHT_SENSOR = Adafruit_DHT.DHT22
     humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
-    valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_T", "type": "t", "value": temperature})
-    valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_H", "type": "h", "value": humidity})
+    valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_T", "type": "t", "value": temperature, "time": readingTimeStampInMs})
+    valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_H", "type": "h", "value": humidity, "time": readingTimeStampInMs})
     return valueList
 
 
 dhtReadings = getDHTSensorValues()
 temperatureReadings = getTemperatureSensorValues()
 
-readings = dhtReadings.extend(temperatureReadings)
-print(dhtReadings)
-print(temperatureReadings)
-print(readings)
+readings = [*dhtReadings, *temperatureReadings]
+
+for reading in readings:
+    print(reading)
+
 print("DONE")
