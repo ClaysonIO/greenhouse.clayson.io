@@ -48,8 +48,8 @@ def getDHTSensorValues(deviceId):
     humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
     if humidity is not None and temperature is not None:
-        valueList.append({"sensorId": "DHT22_H", "type": "h")
-        valueList.append({"sensorId": "DHT22_T", "type": "t")
+        valueList.append({"sensorId": "DHT22_H", "type": "h"})
+        valueList.append({"sensorId": "DHT22_T", "type": "t"})
 
     return valueList
 
@@ -62,6 +62,8 @@ deviceObject = {
     "deviceId": DEVICE_ID,
     "sensors": [*dhtSensors, *temperatureSensors]
 }
+
+print(deviceObject)
 
 r = requests.post(SERVER + "/registerSensors", json=deviceObject)
 
