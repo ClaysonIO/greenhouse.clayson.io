@@ -20,7 +20,7 @@ def getTemperatureSensorValues():
                 value["sensorId"] = name.readline().strip()
 
             with open(folder + "/temperature", 'r') as temperature:
-                value["value"] = float(temperature.readline().strip())
+                value["value"] = float(temperature.readline().strip()) / 1000
 
             if value["sensorId"] is not None and value["value"] is not None:
                 valueList.append(value)
