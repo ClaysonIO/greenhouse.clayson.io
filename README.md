@@ -1,6 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8cf0af92-1395-4743-93cc-2b1a82d7d6dc/deploy-status)](https://app.netlify.com/sites/greenhouse-clayson-io/deploys)
+
 # Greenhouse.clayson.io
 
-All of the code for the the greenhouse thermometers. 
-
-
-Many thanks to https://github.com/mottox2/netlify-functions-typescript-starter and https://github.com/netlify/create-react-app-lambda for getting me started on building my first Netlify Function app. 
+All of the code for the greenhouse thermometers. 
