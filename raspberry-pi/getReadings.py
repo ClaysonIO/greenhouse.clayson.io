@@ -4,6 +4,7 @@ import os
 DEVICE_ID = "margosGreenhouse"
 
 def getTemperatureSensorValues():
+    print("Getting Temperature Values")
     valueList = []
 
     subfolders = [ f.path for f in os.scandir("/sys/bus/w1/devices") if f.is_dir() ]
@@ -19,7 +20,6 @@ def getTemperatureSensorValues():
                 value["value"] = temperature.readline()
 
             if value["sensorId"] is not None and value["value"] is not None:
-                print("VALID!")
                 print(value)
                 valueList.append(value)
 
@@ -28,6 +28,7 @@ def getTemperatureSensorValues():
     return valueList
 
 def getDHTSensorValues():
+    print("Getting DHT Values")
     valueList = []
 
     DHT_PIN = 17
@@ -43,6 +44,7 @@ dhtReadings = getDHTSensorValues()
 temperatureReadings = getTemperatureSensorValues()
 
 readings = dhtReadings.extend(temperatureReadings)
-
+print(dhtReadings)
+print(temperatureReadings)
 print(readings)
 print("DONE")
