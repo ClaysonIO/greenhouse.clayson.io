@@ -17,10 +17,10 @@ def getTemperatureSensorValues():
             value = {"deviceId": DEVICE_ID, "sensorId": None, "type": "t", "value": None, "time": readingTimeStampInMs}
 
             with open(folder + "/name", 'r') as name:
-                value["sensorId"] = name.readline()
+                value["sensorId"] = strip(name.readline())
 
             with open(folder + "/temperature", 'r') as temperature:
-                value["value"] = temperature.readline()
+                value["value"] = float(strip(temperature.readline()))
 
             if value["sensorId"] is not None and value["value"] is not None:
                 print(value)
