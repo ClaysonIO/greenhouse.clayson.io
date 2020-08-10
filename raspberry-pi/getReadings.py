@@ -2,24 +2,47 @@ import Adafruit_DHT
 import os
 
 DEVICE_ID = "margosGreenhouse"
-DHT_PIN = 17
 
-subfolders = [ f.path for f in os.scandir("/sys/bus/w1/devices") if f.is_dir() ]
+dhtReadings = getDHTSensorValues()
+temperatureReadings = getTemperatureSensorValues()
 
-for folder in subfolders:
-    print(folder)
+readings = dhtReadings.extend(temperatureReadings)
 
-    try:
-        temp = open(folder + "/temperature")
-        print(temp.readlines())
-    except FileNotFoundError:
-        print("File Not Found")
-    finally:
-        temp.close()
-
-def getDHTSensorValues(PIN):
-    DHT_SENSOR = Adafruit_DHT.DHT22
-    humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, PIN)
-    return humidity, temperature
-
+print(readings)
 print("DONE")
+
+def getTemperatureSensorValues():
+    valueList = []
+
+    subfolders = [ f.path for f in os.scandir("/sys/bus/w1/devices") if f.is_dir() ]
+
+    for folder in subfolders:
+        try:
+            value = {"deviceId": DEVICE_ID, "sensorId": None, "type": "t", "value": None}
+
+            with open(folder + "/name", 'r') as name:
+                value["sensorId"] = name.readline()
+
+            with open(folder + "/temperature", 'r') as temperature:
+                value["value"] = temperature.readline()
+
+            if value["sensorId"] is not None and value["value"] is not None:
+                print("VALID!")
+                print(value)
+                valueList.append(value)
+
+        except FileNotFoundError:
+            print("File Not Found")
+    return valueList
+
+def getDHTSensorValues():
+    valueList = []
+
+    DHT_PIN = 17
+    DHT_SENSOR = Adafruit_DHT.DHT22
+    humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+
+    valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_T", "type": "t", "value": temperature})
+    valueList.append({"deviceId": DEVICE_ID, "sensorId": "DHT22_H", "type": "h", "value": humidity})
+    return valueList
+

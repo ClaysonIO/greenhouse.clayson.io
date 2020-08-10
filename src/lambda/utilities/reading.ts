@@ -1,5 +1,6 @@
 export interface IReading{
-    id: string,
+    deviceId: string,
+    sensorId: string,
     value: number
     type: 't' | 'h' //For (t)emperature or (h)umidity
 }
