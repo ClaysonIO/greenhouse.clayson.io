@@ -1,10 +1,12 @@
 import Adafruit_DHT
 import os
 import datetime
+import requests
 
 readingTimeStampInMs = round(datetime.datetime.now().timestamp() * 1000)
 
 DEVICE_ID = "margosGreenhouse"
+SERVER = "https://greenhouse.clayson.io/.netlify"
 
 def getTemperatureSensorValues():
     print("Getting Temperature Values")
@@ -51,4 +53,7 @@ readings = [*dhtReadings, *temperatureReadings]
 for reading in readings:
     print(reading)
 
+r = requests.post(SERVER + "/addReadings", json=readings)
+
+print(r.status_code)
 print("DONE")
