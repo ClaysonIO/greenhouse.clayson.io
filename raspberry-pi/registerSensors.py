@@ -21,7 +21,7 @@ def getRaspberryPiSerial():
 
   return cpuserial
 
-def getTemperatureSensorIds():
+def getTemperatureSensorIds(deviceId):
     print("Getting Temperature IDs")
     valueList = []
 
@@ -32,14 +32,14 @@ def getTemperatureSensorIds():
             with open(folder + "/name", 'r') as name:
                 value = name.readline().strip()
                 if value is not None:
-                    valueList.append({"sensorId": value, "type": "t"})
+                    valueList.append({"sensorId": value, "type": "t", "deviceId": deviceId})
 
         except FileNotFoundError:
             print("")
 
     return valueList
 
-def getDHTSensorIds():
+def getDHTSensorIds(deviceId):
     print("Getting DHT IDs")
     valueList = []
 
@@ -48,15 +48,15 @@ def getDHTSensorIds():
     humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
 
     if humidity is not None and temperature is not None:
-        valueList.append({"sensorId": "DHT22_H", "type": "h"})
-        valueList.append({"sensorId": "DHT22_T", "type": "t"})
+        valueList.append({"sensorId": "DHT22_H", "type": "h", "deviceId": deviceId})
+        valueList.append({"sensorId": "DHT22_T", "type": "t", "deviceId": deviceId})
 
     return valueList
 
 DEVICE_ID = getRaspberryPiSerial()
 
-dhtSensors = getDHTSensorIds()
-temperatureSensors = getTemperatureSensorIds()
+dhtSensors = getDHTSensorIds(DEVICE_ID)
+temperatureSensors = getTemperatureSensorIds(DEVICE_ID)
 
 deviceObject = {
     "deviceId": DEVICE_ID,
