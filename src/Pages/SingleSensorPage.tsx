@@ -20,7 +20,9 @@ export const SingleSensorPage = observer(()=>{
     }, [thisDevice, thisSensor, deviceId, sensorId])
 
 
-    const data = React.useMemo(()=>[thisSensor?.chartData] || [], [thisSensor])
+    const readings = thisSensor?.readings;
+    // eslint-disable-next-line
+    const data = React.useMemo(()=>[thisSensor?.chartData] || [], [thisSensor, readings])
 
     const axes = React.useMemo(
         () => [
