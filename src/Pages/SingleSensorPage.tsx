@@ -5,6 +5,7 @@ import {appState} from "../App";
 import {observer} from "mobx-react-lite";
 //@ts-ignore
 import { Chart } from 'react-charts'
+import {Loading} from "../Components/Loading";
 
 export const SingleSensorPage = observer(()=>{
 
@@ -18,7 +19,7 @@ export const SingleSensorPage = observer(()=>{
         thisSensor?.fetchReadings();
     }, [thisDevice, thisSensor, deviceId, sensorId])
 
-    const data = React.useMemo(()=>[thisSensor?.farenheitChartData] || [], [thisSensor?.readings])
+    const data = React.useMemo(()=>[thisSensor?.chartData] || [], [thisSensor?.readings])
 
     const axes = React.useMemo(
         () => [
@@ -37,15 +38,21 @@ export const SingleSensorPage = observer(()=>{
 
     console.log(data)
     return <Layout>
-        <h2>Sensor History</h2>
+        <h2>Sensor History - {thisSensor?.name}</h2>
         {thisSensor ?
+            thisSensor.fetching ? <Loading/> :
             <div>
-                <div><b>TIME:</b> {thisSensor?.latestReading?.dayjs.format("MMM D, hh:mm")}</div>
+                <div><b>TIME:</b> {thisSensor?.latestReading?.dayjs.format("MMM D, h:mm a")}</div>
                 <div><b>VALUE:</b> {thisSensor?.latestReading?.value}</div>
                 <br/>
                 <br/>
                 <div style={{height: '500px', width: '800px'}}>
-                    <Chart data={data} series={series} axes={axes}/>
+                    <Chart
+                        secondaryCursor
+                        data={data}
+                        series={series} 
+                        axes={axes}
+                    />
                 </div>
             </div>
             : ""}

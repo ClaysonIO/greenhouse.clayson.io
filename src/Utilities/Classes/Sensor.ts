@@ -14,8 +14,8 @@ export class Sensor{
     public readonly device: Device;
     @observable public readings: IDetailedReading[] = [];
     @observable public name: string;
-    private fetched: boolean = false;
-    private fetching: boolean = false;
+    @observable private fetched: boolean = false;
+    @observable public fetching: boolean = false;
 
     constructor({deviceId, sensorId, type, name}: ISensor, device: Device) {
         this.deviceId = deviceId;
@@ -31,7 +31,7 @@ export class Sensor{
         console.log("Fetching", this.fetching, this.fetched)
         if(!this.fetching && !this.fetched){
             console.log("Requesting")
-            this.fetching = true;
+            runInAction(()=>this.fetching = true);
             const startDate = +dayjs().utc().subtract(2, 'd').format('YYYYMMDD');
             const endDate = +dayjs().utc().format('YYYYMMDD');
             ApiCalls.GetSensorReadings({sensor: this, startDate, endDate})
@@ -47,9 +47,9 @@ export class Sensor{
                                 value: (this.type === 'h' ? val.v.toFixed(1) + " %" : celsiusToFarenheit(val.v).toFixed(1) + " F"),
                                 ms: val.t
                             }))
+                        this.fetched = true;
+                        this.fetching = false;
                     });
-                    this.fetched = true;
-                    this.fetching = false;
                 })
         }
     }
@@ -58,10 +58,12 @@ export class Sensor{
         return this.readings.length ? this.readings[this.readings.length - 1] : undefined
     }
 
-    @computed public get farenheitChartData(){
+    @computed public get chartData(){
         return ({
             label: this.name,
-            data: this.readings.map(val=>([val.f, val.ms]))
+            data: this.readings
+                .filter(val=>val.ms && (val.c || val.h))
+                .map(val=>([val.ms, this.type === 'h' ? val.h : val.f]))
         })
     }
 }

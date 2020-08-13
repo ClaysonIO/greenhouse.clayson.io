@@ -4,6 +4,7 @@ import {observable, runInAction} from "mobx";
 
 export class AppState{
     @observable public devices: Device[] = [];
+    @observable public ready: boolean = false;
 
     constructor() {
         this.fetchSensors();
@@ -13,7 +14,10 @@ export class AppState{
         ApiCalls
             .GetDevices()
             .then((devices)=>{
-                runInAction(()=>this.devices = devices.map(val=>new Device(val)))
+                runInAction(()=>{
+                    this.devices = devices.map(val=>new Device(val));
+                    this.ready = true;
+                })
             })
     }
 }
