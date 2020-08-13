@@ -16,10 +16,10 @@ export function handler(
         if(event.body && event.httpMethod === 'POST'){
             const body: IReading[] = JSON.parse(event.body);
             const daysUpdate = body.map(reading=>{
-                const date = +dayjs(reading.timestamp).utc().format("YYYYMMDD");
+                const date = +dayjs(reading.time).utc().format("YYYYMMDD");
                 return {
                     find: {deviceId: reading.deviceId, sensorId: reading.sensorId, date: date},
-                    update: {$addToSet: {readings: {t: reading.timestamp, v: reading.value}}}
+                    update: {$addToSet: {readings: {t: reading.time, v: reading.value}}}
                 }
             })
 

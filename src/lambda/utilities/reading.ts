@@ -3,5 +3,5 @@ export interface IReading{
     sensorId: string,
     value: number,
     type: 't' | 'h' //For (t)emperature or (h)umidity
-    timestamp: number
+    time: number
 }
