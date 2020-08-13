@@ -2,10 +2,9 @@ import React, {useEffect} from 'react';
 import {Layout} from "../Components/Layout";
 import {useParams} from "react-router-dom";
 import {appState} from "../App";
-import dayjs from "dayjs";
 import {observer} from "mobx-react-lite";
 //@ts-ignore
-import { ResizableBox, Chart } from 'react-charts'
+import { Chart } from 'react-charts'
 
 export const SingleSensorPage = observer(()=>{
 
