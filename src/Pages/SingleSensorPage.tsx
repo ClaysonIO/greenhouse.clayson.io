@@ -19,7 +19,8 @@ export const SingleSensorPage = observer(()=>{
         thisSensor?.fetchReadings();
     }, [thisDevice, thisSensor, deviceId, sensorId])
 
-    const data = React.useMemo(()=>[thisSensor?.chartData] || [], [thisSensor?.readings])
+
+    const data = React.useMemo(()=>[thisSensor?.chartData] || [], [thisSensor])
 
     const axes = React.useMemo(
         () => [
