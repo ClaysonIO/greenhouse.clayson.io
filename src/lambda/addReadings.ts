@@ -3,6 +3,9 @@ import {APIGatewayProxyCallback, APIGatewayProxyEvent} from "aws-lambda";
 import {IReading} from "./utilities/reading";
 import {MongoHelpers} from "./utilities/mongo";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export function handler(
     event: APIGatewayProxyEvent,
