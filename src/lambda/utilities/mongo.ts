@@ -88,7 +88,7 @@ export class MongoHelpers{
         })
     }
 
-    public static UpdateArray(collectionName: string, valueArray: { ['find']: any, ['update']: any }[]){
+    public static UpsertArray(collectionName: string, valueArray: { ['find']: any, ['update']: any }[]){
         return new Promise((resolve, reject)=>{
             MongoClient.connect(url, function(err, client) {
                 console.log("Connected successfully to server");
@@ -98,7 +98,10 @@ export class MongoHelpers{
                 const bulk = collection.initializeUnorderedBulkOp();
 
                 valueArray.forEach(val=>{
-                    bulk.find(val.find).updateOne(val.update);
+                    bulk
+                        .find(val.find)
+                        .upsert()
+                        .updateOne(val.update);
                 })
 
                 bulk.execute()

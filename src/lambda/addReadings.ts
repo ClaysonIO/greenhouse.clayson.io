@@ -2,6 +2,7 @@
 import {APIGatewayProxyCallback, APIGatewayProxyEvent} from "aws-lambda";
 import {IReading} from "./utilities/reading";
 import {MongoHelpers} from "./utilities/mongo";
+import dayjs from "dayjs";
 
 export function handler(
     event: APIGatewayProxyEvent,
@@ -11,8 +12,15 @@ export function handler(
     try {
         if(event.body && event.httpMethod === 'POST'){
             const body: IReading[] = JSON.parse(event.body);
+            const daysUpdate = body.map(reading=>{
+                const date = +dayjs(reading.timestamp).utc().format("YYYYMMDD");
+                return {
+                    find: {deviceId: reading.deviceId, sensorId: reading.sensorId, date: date},
+                    update: {$addToSet: {readings: {t: reading.timestamp, v: reading.value}}}
+                }
+            })
 
-            MongoHelpers.InsertArray('readings', body)
+            MongoHelpers.UpsertArray('days', daysUpdate)
                 .then(()=>{
                     callback(null, {
                         statusCode: 200,
