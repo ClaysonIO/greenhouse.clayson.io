@@ -58,8 +58,34 @@ export class MongoHelpers{
         })
     }
 
-    public static getSingleSensorReadings({deviceId, sensorId}: {deviceId: string, sensorId: string}){
+    public static getSensorReadings({deviceId, sensorId, startDate, endDate}: {deviceId: string, sensorId: string, startDate: number, endDate: number}){
+        return new Promise((resolve, reject)=>{
+            MongoClient.connect(url, function(err, client) {
+                console.log("Connected successfully to server");
 
+                client
+                    .db(dbName)
+                    .collection("days")
+                    .aggregate([
+                        {$match: {deviceId, sensorId, date: {$gte: startDate, $lte: endDate}}},
+                        {$unwind: "$readings"},
+                        {$group: {
+                                _id: "sensorId",
+                                readings: {$push: "$readings"}
+                            }}
+                    ])
+                    .toArray()
+                    .then((sensors)=>{
+                        client.close()
+                        resolve(sensors[0].readings);
+                    })
+                    .catch(err=>{
+                        console.error(err);
+                        client.close()
+                        reject(err);
+                    });
+            })
+        })
     }
 
     public static InsertArray(collectionName: string, valueArray: any[]){

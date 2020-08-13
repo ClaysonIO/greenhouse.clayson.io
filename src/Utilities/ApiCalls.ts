@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Sensor} from "./Classes/Sensor";
+import {IShortReading, Sensor} from "./Classes/Sensor";
 import {IDevice} from "../lambda/utilities/devices";
 
 export class ApiCalls{
@@ -11,8 +11,8 @@ export class ApiCalls{
         return axios.get(`/.netlify/functions/getSensors`)
     }
 
-    static GetSensorReadings({sensor}: {sensor: Sensor}){
-        return axios.get(`/.netlify/functions/getReadings?deviceId=${sensor.deviceId}&sensorId=${sensor.sensorId}`)
+    static GetSensorReadings({sensor, startDate, endDate}: {sensor: Sensor, startDate: number, endDate: number}){
+        return SimpleGet<IShortReading[]>(`/.netlify/functions/getReadings?deviceId=${sensor.deviceId}&sensorId=${sensor.sensorId}&startDate=${startDate}&endDate=${endDate}`)
     }
 }
 
