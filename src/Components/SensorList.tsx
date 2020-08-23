@@ -25,7 +25,7 @@ export const SensorList = observer(()=>{
             })}
             </tbody>
         </table>
-
+        <hr/>
         <a href={`/devices/${deviceId}/temperature`}>All Temperature Sensors</a>
     </div>)
 })

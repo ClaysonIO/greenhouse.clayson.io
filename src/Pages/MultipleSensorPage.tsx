@@ -17,7 +17,7 @@ export const MultipleSensorPage = observer(()=>{
 
     useEffect(()=>{
         Promise.all(tempSensors.map(val=>val.fetchReadings()))
-    }, [thisDevice, deviceId])
+    }, [thisDevice, deviceId, tempSensors])
 
 
     const readings = tempSensors.map(val=>val.readings);
